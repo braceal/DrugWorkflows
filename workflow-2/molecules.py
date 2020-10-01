@@ -25,6 +25,16 @@ export RADICAL_PILOT_PROFILE=True
 export RADICAL_ENTK_PROFILE=True
 '''
 
+def get_ligand_topology(pdb_file):
+    # Assume abspath is passed and that ligand ID is enoded in pdb_file name
+    # pdb_file: /path/system_<ligid>_<timestamp>.pdb
+    # topol:    /path/topology_<ligid>.pdb
+    topol_dir = 'TODO'
+    pdb_filename = os.path.basename(pdb_file)
+    ligid = pdb_filename.split('_')[1]
+    return os.path.join(topol_dir, f'topology_{ligid}')
+
+
 def generate_training_pipeline(cfg):
     """
     Function to generate the CVAE_MD pipeline
@@ -71,13 +81,17 @@ def generate_training_pipeline(cfg):
 
             # pick initial point of simulation
             if initial_MD or i >= len(outlier_list):
-                t1.arguments += ['--pdb_file', cfg['pdb_file'] ]
+                # Not used ince outlier_list is filled from the start
+                t1.arguments += ['--pdb_file', cfg['pdb_file']]
+                t1.arguments += ['--topol', get_ligand_topology(cfg['pdb_file'])]
             elif outlier_list[i].endswith('pdb'):
-                t1.arguments += ['--pdb_file', outlier_list[i]]
+                t1.arguments += ['--pdb_file', outlier_list[i],
+                                 '--topol', get_ligand_topology(outlier_list[i])]
                 t1.pre_exec += ['cp %s ./' % outlier_list[i]]
             elif outlier_list[i].endswith('chk'):
                 t1.arguments += ['--pdb_file', cfg['pdb_file'],
-                        '-c', outlier_list[i]]
+                                 '-c', outlier_list[i],
+                                 '--topol', get_ligand_topology(outlier_list[i])]
                 t1.pre_exec += ['cp %s ./' % outlier_list[i]]
 
             # how long to run the simulation
