@@ -1,3 +1,5 @@
+import os
+
 base_path = '/gpfs/alpine/med110/scratch/atrifan2/PLPro_ligands/gb_plpro/DrugWorkflows/workflow-2/'
 
 top_dir = os.path.join(base_path, '/top_dir/')
@@ -23,8 +25,16 @@ for ligid in good_ligands:
 		pdb_path = f'/gpfs/alpine/scratch/atrifan2/med110/PLPro_ligands/output_6w9c_new/pdbs/sys_{lig_num}.pdb'
 		top_path = f'/gpfs/alpine/scratch/atrifan2/med110/PLPro_ligands/6w9c/{ligid}/fe/build/com-wat3.top'
 
-	new_pdb_path = os.path.join(pdb_dir, f'system_{ligid}.pdb')
-	new_top_path = os.path.join(top_dir, f'topology_{ligid}.top')
+    assert os.path.exists(pdb_path)
+    assert os.path.exists(top_path)
+
+	new_pdb_path = os.path.join(pdb_dir, f'system_{lig_num}.pdb')
+	new_top_path = os.path.join(top_dir, f'topology_{lig_num}.top')
+
+    print(new_pdb_path)
+    print(new_top_path)
+
+    exit()
 
 	copyfile(pdb_path, new_pdb_path)
 
