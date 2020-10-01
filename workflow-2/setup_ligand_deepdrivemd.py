@@ -16,31 +16,31 @@ pdb_files = []
 
 for ligid in good_ligands:
 
-	lig_num = int(ligid[1:])
+    lig_num = int(ligid[1:])
 
-	if lig_num < 6000:
-		pdb_path = f'/gpfs/alpine/scratch/atrifan2/med110/PLPro_ligands/output_6w9c/pdbs/sys_{lig_num}.pdb'
-		top_path = f'/gpfs/alpine/world-shared/chm155/dario/6w9c/{ligid}/fe/build/com-wat3.top'
-	else:
-		pdb_path = f'/gpfs/alpine/scratch/atrifan2/med110/PLPro_ligands/output_6w9c_new/pdbs/sys_{lig_num}.pdb'
-		top_path = f'/gpfs/alpine/scratch/atrifan2/med110/PLPro_ligands/6w9c/{ligid}/fe/build/com-wat3.top'
+    if lig_num < 6000:
+        pdb_path = f'/gpfs/alpine/scratch/atrifan2/med110/PLPro_ligands/output_6w9c/pdbs/sys_{lig_num}.pdb'
+        top_path = f'/gpfs/alpine/world-shared/chm155/dario/6w9c/{ligid}/fe/build/com-wat3.top'
+    else:
+        pdb_path = f'/gpfs/alpine/scratch/atrifan2/med110/PLPro_ligands/output_6w9c_new/pdbs/sys_{lig_num}.pdb'
+        top_path = f'/gpfs/alpine/scratch/atrifan2/med110/PLPro_ligands/6w9c/{ligid}/fe/build/com-wat3.top'
 
     assert os.path.exists(pdb_path)
     assert os.path.exists(top_path)
 
-	new_pdb_path = os.path.join(pdb_dir, f'system_{lig_num}.pdb')
-	new_top_path = os.path.join(top_dir, f'topology_{lig_num}.top')
+    new_pdb_path = os.path.join(pdb_dir, f'system_{lig_num}.pdb')
+    new_top_path = os.path.join(top_dir, f'topology_{lig_num}.top')
 
     print(new_pdb_path)
     print(new_top_path)
 
     exit()
 
-	copyfile(pdb_path, new_pdb_path)
+    copyfile(pdb_path, new_pdb_path)
 
-	copyfile(top_path, new_top_path)
+    copyfile(top_path, new_top_path)
 
-	pdb_files.append(new_pdb_path)
+    pdb_files.append(new_pdb_path)
 
 with open(restart_points_path, 'w') as restart_file:
     json.dump(pdb_files, restart_file)
